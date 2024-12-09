@@ -43,19 +43,21 @@ router.get('/', verify, async (req,res) => {
 
 router.post('/create', verify, async (req,res) => {
     try {
-        const { title, body, topic, expirationTimeSec, owner } = req.body;
+        const { postId, title, body, topic, expirationTimeSec, owner } = req.body;
 
         // Validation: Check required fields
-        if (!title || !body || !topic || !expirationTimeSec || !owner) {
+        if (!postId || !title || !body || !topic || !expirationTimeSec || !owner) {
             return res.status(400).send({ message: 'All fields are required.' });
         }
 
         // Create a new post object
         const newPost = new Post({
+            postId,
             title,
             body,
             topic,
-            expirationTimeSec,
+            expirationTimeSec:expirationTimeSec,
+            status:'live',
             owner,
             likes: 0, // Default value
             dislikes: 0, // Default value
@@ -73,7 +75,7 @@ router.post('/create', verify, async (req,res) => {
 
 router.post('/interact', verify, async (req, res) => {
     try {
-        const { postId, action, name, comment } = req.query;
+        const { postId, action, name, comment } = req.body;
 
         // Validate required fields
         if (!postId || !action) {
