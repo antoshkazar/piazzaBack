@@ -3,9 +3,9 @@ const router = express.Router()
 
 const Post = require('../models/Post')
 const  {isPostExpired} = require('../validations/validation')
-// const verify = require('../verifyToken')
+const verify = require('../verifyToken')
 
-router.get('/', async (req,res) => {
+router.get('/', verify, async (req,res) => {
     try {
         // topic - chosen topic
         // onlyExpired (boolean) - show only actual posts or only expired ones
@@ -41,7 +41,7 @@ router.get('/', async (req,res) => {
     }  
 })
 
-router.post('/create', async (req,res) => {
+router.post('/create', verify, async (req,res) => {
     try {
         const { title, body, topic, expirationTimeSec, owner } = req.body;
 
@@ -71,7 +71,7 @@ router.post('/create', async (req,res) => {
     
 })
 
-router.post('/interact', async (req, res) => {
+router.post('/interact', verify, async (req, res) => {
     try {
         const { postId, action, name, comment } = req.query;
 
