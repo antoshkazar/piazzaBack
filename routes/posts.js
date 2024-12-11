@@ -43,16 +43,16 @@ router.get('/', verify, async (req,res) => {
 
 router.post('/create', verify, async (req,res) => {
     try {
-        const { postId, title, body, topic, expirationTimeSec, owner } = req.body;
+        const { postid, title, body, topic, expirationTimeSec, owner } = req.body;
 
         // Validation: Check required fields
-        if (!postId || !title || !body || !topic || !expirationTimeSec || !owner) {
+        if (!postid || !title || !body || !topic || !expirationTimeSec || !owner) {
             return res.status(400).send({ message: 'All fields are required.' });
         }
 
         // Create a new post object
         const newPost = new Post({
-            postId,
+            postid,
             title,
             body,
             topic,
@@ -75,15 +75,15 @@ router.post('/create', verify, async (req,res) => {
 
 router.post('/interact', verify, async (req, res) => {
     try {
-        const { postId, action, name, comment } = req.body;
+        const { postid, action, name, comment } = req.query;
 
         // Validate required fields
-        if (!postId || !action) {
-            return res.status(400).send({ message: 'postId and action are required.' });
+        if (!postid || !action) {
+            return res.status(400).send({ message: 'postid and action are required.' });
         }
 
         // Find the post
-        const post = await Post.findOne({ postid: postId });
+        const post = await Post.findOne({ postid: postid });
         if (!post) {
             return res.status(404).send({ message: 'Post not found!' });
         }
@@ -116,7 +116,7 @@ router.post('/interact', verify, async (req, res) => {
 
         // Perform the update
         const updatedPost = await Post.findOneAndUpdate(
-            { postid: postId },
+            { postid: postid },
             update,
             { new: true } // Return the updated document
         );
