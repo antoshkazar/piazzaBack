@@ -95,6 +95,11 @@ router.post('/interact', verify, async (req, res) => {
             }
         }
 
+         // Check if the post is expired
+         if (isPostExpired(post)) {
+            return res.status(403).send({ message: 'Post is expired. You cannot perform action on it.' });
+        }
+
         // Handle actions
         let update = {};
         if (action === 'like') {
@@ -105,10 +110,7 @@ router.post('/interact', verify, async (req, res) => {
             if (!comment) {
                 return res.status(400).send({ message: 'Comment is required for the comment action.' });
             }
-            // Check if the post is expired
-            if (isPostExpired(post)) {
-                return res.status(403).send({ message: 'Post is expired. You cannot comment on it.' });
-            }
+        
             update = { $push: { comments: comment } };
         } else {
             return res.status(400).send({ message: 'Invalid action. Use like, dislike, or comment.' });
