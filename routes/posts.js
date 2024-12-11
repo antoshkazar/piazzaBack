@@ -75,7 +75,7 @@ router.post('/create', verify, async (req,res) => {
 
 router.post('/interact', verify, async (req, res) => {
     try {
-        const { postId, action, name, comment } = req.body;
+        const { postId, action, name, comment } = req.query;
 
         // Validate required fields
         if (!postId || !action) {
